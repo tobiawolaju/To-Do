@@ -1,0 +1,181 @@
+[
+  {
+    "id": 1,
+    "title": "Wake Up & Meditation",
+    "startTime": "04:00",
+    "endTime": "05:00",
+    "color": "#FFC107",
+    "description": "Start the day with gratitude and mindfulness. focus on breathing and setting intentions for the day.",
+    "location": "Bedroom / Balcony",
+    "status": "Completed",
+    "attendees": []
+  },
+  {
+    "id": 2,
+    "title": "Gym / Exercise",
+    "startTime": "05:00",
+    "endTime": "06:30",
+    "color": "#FF5722",
+    "description": "Full body workout session. Focus on compound movements: Squats, Deadlifts, Bench Press.",
+    "location": "Local Gym",
+    "status": "Completed",
+    "attendees": [
+      "Trainer Mark"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Breakfast & Planning",
+    "startTime": "06:30",
+    "endTime": "07:30",
+    "color": "#FF9800",
+    "description": "Healthy breakfast (Oatmeal + Protein Shake). Review daily goals and schedule.",
+    "location": "Kitchen",
+    "status": "Completed",
+    "attendees": []
+  },
+  {
+    "id": 4,
+    "title": "Deep Work - Project A",
+    "startTime": "08:00",
+    "endTime": "11:30",
+    "color": "#64B5F6",
+    "description": "Core development time for the new feature launch. No distractions.",
+    "location": "Home Office",
+    "status": "In Progress",
+    "attendees": []
+  },
+  {
+    "id": 5,
+    "title": "Focus Music Playlist",
+    "startTime": "08:00",
+    "endTime": "11:30",
+    "color": "#9C27B0",
+    "description": "Background music stream for deep work session.",
+    "location": "Spotify",
+    "status": "In Progress",
+    "attendees": []
+  },
+  {
+    "id": 6,
+    "title": "Team Huddle",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "color": "#4CAF50",
+    "description": "Daily standup meeting with the engineering team to discuss progress and blockers.",
+    "location": "Zoom Room A",
+    "status": "Pending",
+    "attendees": [
+      "Sarah",
+      "Mike",
+      "Jessica"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Lunch Break",
+    "startTime": "12:00",
+    "endTime": "13:00",
+    "color": "#E91E63",
+    "description": "Rest and refuel. Avoid screens if possible.",
+    "location": "Dining Area",
+    "status": "Pending",
+    "attendees": []
+  },
+  {
+    "id": 8,
+    "title": "Client Calls",
+    "startTime": "13:30",
+    "endTime": "15:30",
+    "color": "#00BCD4",
+    "description": "Review project requirements with Client X and discuss timeline updates.",
+    "location": "Google Meet",
+    "status": "Pending",
+    "attendees": [
+      "Client X Rep"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Code Review",
+    "startTime": "16:00",
+    "endTime": "17:30",
+    "color": "#3F51B5",
+    "description": "Review pull requests from the junior dev team. Focus on code quality and performance.",
+    "location": "GitHub",
+    "status": "Pending",
+    "attendees": [
+      "Junior Devs"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Listen to Podcast",
+    "startTime": "16:00",
+    "endTime": "17:30",
+    "color": "#795548",
+    "description": "Tech news and industry trends podcast.",
+    "location": "Headphones",
+    "status": "Pending",
+    "attendees": []
+  },
+  {
+    "id": 11,
+    "title": "Evening Nap",
+    "startTime": "18:00",
+    "endTime": "20:00",
+    "color": "#673AB7",
+    "description": "Power nap to recharge for the evening session.",
+    "location": "Living Room",
+    "status": "Pending",
+    "attendees": []
+  },
+  {
+    "id": 12,
+    "title": "Dinner",
+    "startTime": "20:00",
+    "endTime": "21:00",
+    "color": "#FFC107",
+    "description": "Family dinner time.",
+    "location": "Dining Area",
+    "status": "Pending",
+    "attendees": [
+      "Family"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Side Project Dev",
+    "startTime": "21:00",
+    "endTime": "23:00",
+    "color": "#2196F3",
+    "description": "Working on the personal AI assistant project.",
+    "location": "Home Office",
+    "status": "Pending",
+    "attendees": []
+  },
+  {
+    "id": 14,
+    "title": "Discord / Community",
+    "startTime": "21:30",
+    "endTime": "22:30",
+    "color": "#7289DA",
+    "description": "Mod duties and chatting with the community.",
+    "location": "Discord",
+    "status": "Pending",
+    "attendees": [
+      "Community Members"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Wind Down / Reading",
+    "startTime": "23:00",
+    "endTime": "23:59",
+    "color": "#607D8B",
+    "description": "Reading fiction to relax before sleep.",
+    "location": "Bedroom",
+    "status": "Pending",
+    "attendees": []
+  }
+]

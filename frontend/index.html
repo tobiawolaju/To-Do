@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Timeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Auth UI -->
+    <div id="auth-container" style="position: absolute; top: 1rem; right: 1rem; z-index: 1000;">
+        <button id="params-signin-btn" class="action-button primary">Sign in with Google</button>
+        <div id="user-profile" class="hidden"
+            style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(10px);">
+            <img id="user-photo" src="" alt="User" style="width: 32px; height: 32px; border-radius: 50%;">
+            <span id="user-name" style="color: white; font-size: 0.9rem;"></span>
+            <button id="signout-btn" class="action-button secondary" style="padding: 4px 8px; font-size: 0.8rem;">Sign
+                Out</button>
+        </div>
+    </div>
+    <div id="splash-screen">
+        <div class="splash-content">
+            <h1 class="splash-title">My Day</h1>
+            <p class="splash-subtitle">Organize your life</p>
+        </div>
+    </div>
+    <div class="app-container">
+        <header>
+            <h1>My Day</h1>
+            <p id="current-date"></p>
+        </header>
+
+        <div class="main-content">
+            <main class="timeline-container">
+                <div class="timeline-scroll-area" id="timeline-scroll-area">
+                    <div class="time-ruler" id="time-ruler">
+                        <!-- Time markers will be generated here -->
+                    </div>
+                    <div class="tracks-container" id="tracks-container">
+                        <!-- Activity blocks will be generated here -->
+                    </div>
+                    <div class="current-time-indicator" id="current-time-indicator"></div>
+                </div>
+            </main>
+            <aside class="details-panel">
+                <div class="empty-state">Select an activity to see details</div>
+            </aside>
+            <footer class="chat-input-container">
+                <button class="icon-btn attachment-btn" aria-label="Add attachment">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                        </path>
+                    </svg>
+                </button>
+                <div class="input-wrapper">
+                    <input type="text" id="chat-input" placeholder="Ask your AI assistant...">
+                </div>
+                <button class="icon-btn action-btn" id="action-btn" aria-label="Voice input">
+                    <!-- Mic Icon (Default) -->
+                    <svg class="icon-mic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                    <!-- Send Icon (Hidden initially) -->
+                    <svg class="icon-send hidden" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </footer>
+        </div>
+        <script type="module" src="script.js"></script>
+</body>
+
+</html>
