@@ -23,7 +23,7 @@
     --track-gap: 16px;
 
     --radius-xs: 4px;
-    --radius-s: 100px;
+    --radius-s: 10px;
     --radius-m: 12px;
     --radius-l: 20px;
     --radius-pill: 100px;
@@ -330,7 +330,7 @@ header h1 {
     padding: 6px 16px;
     flex: 1;
     height: 40px;
-    border-radius: var(--radius-s);
+    border-radius: 100px;
     /* Fully rounded */
     border: none;
     font-weight: 500;
