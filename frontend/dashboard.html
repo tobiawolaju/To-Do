@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Life Timeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-page">
+    <header>
+        <div class="header-main" style="display: flex; align-items: center;">
+            <button id="back-home-btn" class="icon-btn" aria-label="Go back">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+            <h1 id="user-name-header">Tobi Awolaju</h1>
+        </div>
+        <div id="auth-container">
+
+
+            <div id="user-profile">
+                <img id="user-photo" src="" alt="User">
+                <button id="signout-btn" class="icon-btn" aria-label="Sign out">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <section class="dashboard-card heatmap-section">
+            <h3>Activity Heatmap</h3>
+            <div class="heatmap-wrapper">
+                <div class="heatmap-grid" id="heatmap-grid">
+                    <!-- Heat cells generated via JS -->
+                </div>
+            </div>
+            <p style="color: var(--text-tertiary); font-size: 0.8rem; margin-top: 16px;">Daily productivity
+                visualization based on scheduled activities.</p>
+        </section>
+    </div>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+
+</html>

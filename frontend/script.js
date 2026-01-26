@@ -43,6 +43,13 @@ function initAuth() {
     const userProfile = document.getElementById('user-profile');
     const userPhoto = document.getElementById('user-photo');
 
+    userProfile.addEventListener('click', (e) => {
+        // Only redirect if they didn't click the signout button
+        if (!e.target.closest('#signout-btn')) {
+            window.location.href = 'dashboard.html';
+        }
+    });
+
     signInBtn.addEventListener('click', () => {
         auth.signInWithPopup(provider).then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
