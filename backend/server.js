@@ -96,7 +96,7 @@ app.post('/api/chat', async (req, res) => {
         }
 
         // Use Gemini Pro model
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
         const chat = model.startChat({
             tools: [{ functionDeclarations: toolDeclarations }],

@@ -3,7 +3,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/database';
 
 const CONFIG = {
-    pixelsPerMinute: 2, // Must match CSS --hour-width (120px / 60min = 2px)
+    pixelsPerMinute: 3.333, // Match CSS --hour-width (200px / 60min)
     startHour: 0,
     endHour: 24
 };
@@ -42,7 +42,6 @@ function initAuth() {
     const signOutBtn = document.getElementById('signout-btn');
     const userProfile = document.getElementById('user-profile');
     const userPhoto = document.getElementById('user-photo');
-    const userName = document.getElementById('user-name');
 
     signInBtn.addEventListener('click', () => {
         auth.signInWithPopup(provider).then((result) => {
@@ -72,7 +71,6 @@ function initAuth() {
             signInBtn.classList.add('hidden');
             userProfile.classList.remove('hidden');
             userPhoto.src = user.photoURL;
-            userName.textContent = user.displayName;
 
             // Load Data
             loadUserSchedule(user.uid);
@@ -83,7 +81,6 @@ function initAuth() {
 
             // Clear Data
             document.getElementById('tracks-container').innerHTML = '';
-            // Could load demo data here if desired
         }
     });
 }
@@ -102,7 +99,8 @@ function loadUserSchedule(uid) {
 }
 
 function renderDetails(activity) {
-    const panel = document.querySelector('.details-panel');
+    const panel = document.getElementById('details-panel');
+    const overlay = document.getElementById('details-overlay');
 
     // Status color mapping
     const statusColors = {
@@ -118,7 +116,7 @@ function renderDetails(activity) {
             <div class="detail-header">
                 <div class="detail-title-row">
                     <h2>${activity.title}</h2>
-                    <span class="status-chip" style="background-color: ${hexToRgba(statusColor, 0.2)}; color: ${statusColor}; border: 1px solid ${statusColor}">${activity.status || 'Scheduled'}</span>
+                    <span class="status-chip" style="background-color: ${hexToRgba(statusColor, 0.1)}; color: ${statusColor}; border: 1px solid ${hexToRgba(statusColor, 0.3)}">${activity.status || 'Scheduled'}</span>
                 </div>
                 <div class="detail-time">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -156,6 +154,19 @@ function renderDetails(activity) {
             </div>
         </div>
     `;
+
+    // Open sheet on mobile
+    panel.classList.add('open');
+    overlay.classList.add('active');
+    document.querySelector('.chat-input-container').classList.add('hidden-mobile');
+}
+
+function closeDetails() {
+    const panel = document.getElementById('details-panel');
+    const overlay = document.getElementById('details-overlay');
+    panel.classList.remove('open');
+    overlay.classList.remove('active');
+    document.querySelector('.chat-input-container').classList.remove('hidden-mobile');
 }
 
 function init() {
@@ -165,23 +176,21 @@ function init() {
     setupChatInput();
     initAuth(); // Initialize auth listeners
 
+    // Close details when clicking overlay
+    document.getElementById('details-overlay').addEventListener('click', closeDetails);
+
+    // Splash Screen Timer (2.5s)
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.classList.add('fade-out');
+    }, 2500);
+
     // Set date
     const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
     document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', dateOptions);
-
-    // Hide splash screen after a short delay
-    setTimeout(hideSplashScreen, 1500);
 }
 
-function hideSplashScreen() {
-    const splash = document.getElementById('splash-screen');
-    if (splash) {
-        splash.classList.add('fade-out');
-        setTimeout(() => {
-            splash.remove();
-        }, 800);
-    }
-}
+
 
 function setupChatInput() {
     const input = document.getElementById('chat-input');
@@ -325,8 +334,8 @@ function layoutAndRenderActivities(activities) {
 
     // 3. Render
     const container = document.getElementById('tracks-container');
-    const trackHeight = 60;
-    const trackGap = 10;
+    const trackHeight = 80; // Match CSS
+    const trackGap = 16;  // Match CSS
 
     container.style.height = `${tracks.length * (trackHeight + trackGap)}px`;
 
@@ -346,10 +355,10 @@ function layoutAndRenderActivities(activities) {
         el.style.width = `${duration * CONFIG.pixelsPerMinute}px`;
         el.style.top = `${activity.trackIndex * (trackHeight + trackGap)}px`;
 
-        let bgColor = activity.color || '#2196F3';
-        el.style.backgroundColor = bgColor;
-        el.style.background = hexToRgba(bgColor, 0.25);
-        el.style.borderColor = bgColor;
+        let bgColor = activity.color || 'var(--accent-primary)';
+        el.style.backgroundColor = hexToRgba(bgColor, 0.15);
+        el.style.borderLeft = `4px solid ${bgColor}`;
+        el.style.color = 'var(--text-primary)';
 
         el.addEventListener('click', (e) => {
             e.stopPropagation();

@@ -7,48 +7,51 @@
     <title>Life Timeline</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Auth UI -->
-    <div id="auth-container" style="position: absolute; top: 1rem; right: 1rem; z-index: 1000;">
-        <button id="params-signin-btn" class="action-button primary">Sign in with Google</button>
-        <div id="user-profile" class="hidden"
-            style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(10px);">
-            <img id="user-photo" src="" alt="User" style="width: 32px; height: 32px; border-radius: 50%;">
-            <span id="user-name" style="color: white; font-size: 0.9rem;"></span>
-            <button id="signout-btn" class="action-button secondary" style="padding: 4px 8px; font-size: 0.8rem;">Sign
-                Out</button>
-        </div>
-    </div>
     <div id="splash-screen">
-        <div class="splash-content">
-            <h1 class="splash-title">My Day</h1>
-            <p class="splash-subtitle">Organize your life</p>
-        </div>
+        <div class="levitating-circle"></div>
     </div>
-    <div class="app-container">
-        <header>
+    <header>
+        <div class="header-main">
             <h1>My Day</h1>
             <p id="current-date"></p>
-        </header>
+        </div>
+        <div id="auth-container">
+            <button id="params-signin-btn" class="action-button primary">Sign in
 
+            </button>
+
+            <div id="user-profile" class="hidden">
+                <img id="user-photo" src="" alt="User">
+                <button id="signout-btn" class="icon-btn" aria-label="Sign out">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
         <div class="main-content">
             <main class="timeline-container">
                 <div class="timeline-scroll-area" id="timeline-scroll-area">
-                    <div class="time-ruler" id="time-ruler">
-                        <!-- Time markers will be generated here -->
-                    </div>
-                    <div class="tracks-container" id="tracks-container">
-                        <!-- Activity blocks will be generated here -->
-                    </div>
+                    <div class="time-ruler" id="time-ruler"></div>
+                    <div class="tracks-container" id="tracks-container"></div>
                     <div class="current-time-indicator" id="current-time-indicator"></div>
                 </div>
             </main>
-            <aside class="details-panel">
-                <div class="empty-state">Select an activity to see details</div>
+            <div class="details-panel-overlay" id="details-overlay"></div>
+            <aside class="details-panel" id="details-panel">
+                <div class="empty-state">Select an activity</div>
             </aside>
             <footer class="chat-input-container">
                 <button class="icon-btn attachment-btn" aria-label="Add attachment">
