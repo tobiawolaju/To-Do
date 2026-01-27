@@ -236,38 +236,20 @@ function setupChatInput() {
         input.disabled = true;
 
         try {
-            // Helper to try local then live
-            const callToAI = async (payload) => {
-                const localUrl = "http://localhost:3000/api/chat";
-                const liveUrl = "https://to-do-iun8.onrender.com/api/chat";
+            // Get current Firebase ID token
+            const idToken = await currentUser.getIdToken();
 
-                try {
-                    console.log("Attempting local API...");
-                    const localRes = await fetch(localUrl, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload),
-                        signal: AbortSignal.timeout(2000) // Don't wait too long for local
-                    });
-                    if (localRes.ok) return localRes;
-                    throw new Error("Local API failed with status " + localRes.status);
-                } catch (err) {
-                    console.warn("Local API unavailable, falling back to live Render endpoint...", err);
-                    return await fetch(liveUrl, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-                }
-            };
+            const response = await fetch("http://localhost:3000/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message,
+                    userId: currentUser.uid,   // <-- required by backend
+                    accessToken: googleAccessToken || null
+                })
+            });
 
-            const payload = {
-                message,
-                userId: currentUser.uid,
-                accessToken: googleAccessToken || null
-            };
 
-            const response = await callToAI(payload);
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
