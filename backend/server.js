@@ -1,10 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { admin, db } = require('./firebase-config');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const tools = require('./tools');
-
 
 // --------------------
 // Gemini Chat Route
@@ -49,11 +47,11 @@ app.post("/api/activities/delete", async (req, res) => {
 // --------------------
 function normalizeAliases(args) {
     return {
-        title: args.title || args.activity || args.task,
-        startTime: args.startTime || args.time || args.at,
-        endTime: args.endTime,
+        title: args.title || args.activity || args.task || args.event,
+        startTime: args.startTime || args.time || args.at || args.start,
+        endTime: args.endTime || args.end,
         duration: args.duration,
-        description: args.description,
+        description: args.description || args.desc,
         location: args.location,
         id: args.id,
         query: args.query
@@ -84,7 +82,7 @@ function normalizeAddActivityArgs(args) {
     const { title, startTime, endTime, duration } = args;
 
     if (!title || !startTime) {
-        throw new Error("title and startTime are required");
+        throw new Error(`Missing title or startTime for task: ${title || 'Unknown'}`);
     }
 
     // Ensure startTime is formatted as HH:MM
@@ -119,8 +117,15 @@ function normalizeAddActivityArgs(args) {
         }
     }
 
+    // Default to 1 hour if no end time/duration provided
+    if (!finalEndTime && parsedStart) {
+        const end = new Date(parsedStart.getTime() + 60 * 60000);
+        finalEndTime = formatTime(end);
+    }
+
     if (!finalEndTime) {
-        throw new Error("endTime is required (or provide duration)");
+         // Fallback for edge cases
+        throw new Error(`Could not calculate end time for ${title}`);
     }
 
     return {
@@ -148,16 +153,7 @@ IMPORTANT:
 Schema:
 {
   "intent": "getSchedule" | "addActivity" | "updateActivity" | "deleteActivity" | "findHackathons" | null,
-  "arguments": {
-    "title"?: string,
-    "startTime"?: string,
-    "endTime"?: string,
-    "duration"?: string,
-    "description"?: string,
-    "location"?: string,
-    "id"?: number,
-    "query"?: string
-  },
+  "arguments": { ... } OR [ { ... }, { ... } ],
   "confidence": number
 }
 
@@ -165,6 +161,11 @@ Mapping rules:
 - "activity", "task", "event" → title
 - "time", "at", "starts" → startTime
 - "for X minutes/hours" → duration
+
+MULTIPLE TASKS:
+If the user wants to add multiple activities (e.g., "Swim at 10pm AND Read at 8am"),
+set "intent" to "addActivity" and make "arguments" an ARRAY of objects.
+Example: "arguments": [{ "title": "Swim", "time": "10pm" }, { "title": "Read", "time": "8am" }]
 
 Rules:
 - If required fields are missing, still return best guess
@@ -178,7 +179,9 @@ User message:
     const text = result.response.text().trim();
 
     try {
-        return JSON.parse(text);
+        // Clean markdown code blocks if AI adds them
+        const jsonText = text.replace(/```json/g, "").replace(/```/g, "");
+        return JSON.parse(jsonText);
     } catch (err) {
         console.error("Intent JSON parse failed:", text);
         return { intent: null, arguments: {}, confidence: 0 };
@@ -191,13 +194,13 @@ User message:
 // --------------------
 app.post("/api/chat", async (req, res) => {
     try {
-        const { message, userId } = req.body;
+        const { message, userId, accessToken } = req.body;
         if (!message || !userId) {
             return res.status(400).json({ error: "message and userId required" });
         }
 
         const { intent, arguments: rawArgs, confidence } = await extractIntent(message);
-        console.log("INTENT:", intent, "CONFIDENCE:", confidence, "ARGS:", rawArgs);
+        console.log("INTENT:", intent, "ARGS:", JSON.stringify(rawArgs, null, 2));
 
         if (!intent || confidence < 0.6) {
             return res.json({ reply: "I’m not sure what you want to do.", refreshNeeded: false });
@@ -205,14 +208,47 @@ app.post("/api/chat", async (req, res) => {
 
         let result = null;
         let refreshNeeded = false;
-        const { accessToken } = req.body;
         const context = { uid: userId, accessToken };
 
         switch (intent) {
             case "addActivity": {
+                // Handle Single Object or Array of Objects
+                const argsList = Array.isArray(rawArgs) ? rawArgs : [rawArgs];
+                const responses = [];
+
+                // Process sequentially to prevent Database ID race conditions
+                for (const args of argsList) {
+                    try {
+                        const aliasedArgs = normalizeAliases(args);
+                        const safeArgs = normalizeAddActivityArgs(aliasedArgs);
+                        const opResult = await tools.addActivity(safeArgs, context);
+                        responses.push(opResult);
+                    } catch (innerErr) {
+                        console.error(`Error adding task:`, innerErr);
+                        responses.push({ success: false, error: innerErr.message });
+                    }
+                }
+
+                // Create a summary message
+                const successCount = responses.filter(r => r.success).length;
+                result = { 
+                    message: `Added ${successCount} activity(s).`,
+                    details: responses 
+                };
+                refreshNeeded = true;
+                break;
+            }
+
+            case "updateActivity": {
                 const aliasedArgs = normalizeAliases(rawArgs);
-                const safeArgs = normalizeAddActivityArgs(aliasedArgs);
-                result = await tools.addActivity(safeArgs, context);
+                result = await tools.updateActivity(aliasedArgs, context);
+                refreshNeeded = true;
+                break;
+            }
+
+            case "deleteActivity": {
+                const aliasedArgs = normalizeAliases(rawArgs);
+                result = await tools.deleteActivity(aliasedArgs, context);
                 refreshNeeded = true;
                 break;
             }
@@ -222,12 +258,19 @@ app.post("/api/chat", async (req, res) => {
                 break;
             }
 
+            case "findHackathons": {
+                result = await tools.findHackathons({ query: rawArgs.query || "hackathons" });
+                break;
+            }
+
             default:
                 return res.json({ reply: "That action isn’t supported yet.", refreshNeeded: false });
         }
 
         res.json({
-            reply: "Done ✅",
+            reply: Array.isArray(rawArgs) && intent === "addActivity" 
+                   ? `Done! I've added your tasks.` 
+                   : "Done ✅",
             result,
             refreshNeeded
         });
@@ -242,12 +285,17 @@ app.post("/api/chat", async (req, res) => {
 // Debug Route
 // --------------------
 app.get("/api/debug", async (_, res) => {
-    const { firebaseReady } = require('./firebase-config');
+    // Basic check without crashing if firebase-config isn't perfectly set up in dev
+    let firebaseStatus = "Unknown";
+    try {
+        const { firebaseReady } = require('./firebase-config');
+        firebaseStatus = firebaseReady ? "Connected" : "Not Configured";
+    } catch(e) { firebaseStatus = "Error loading module"; }
+
     const status = {
         geminiKeyPresent: !!process.env.GEMINI_API_KEY,
-        firebaseConfigured: firebaseReady,
+        firebase: firebaseStatus,
         envFile: require("fs").existsSync(".env"),
-        render: !!process.env.RENDER,
         nodeVersion: process.version
     };
     res.json(status);
