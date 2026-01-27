@@ -87,6 +87,15 @@ function normalizeAddActivityArgs(args) {
         throw new Error("title and startTime are required");
     }
 
+    // Ensure startTime is formatted as HH:MM
+    const parsedStart = parseTime(startTime);
+    let normalizedStartTime = startTime;
+    if (parsedStart) {
+        normalizedStartTime = formatTime(parsedStart);
+    }
+
+    let finalEndTime = endTime;
+
     if (!endTime && duration) {
         const match = duration.match(/(\d+)\s*(min|mins|minutes|hr|hour|hours)/i);
         if (match) {
@@ -97,19 +106,28 @@ function normalizeAddActivityArgs(args) {
             if (start) {
                 const minutesToAdd = unit.startsWith("h") ? value * 60 : value;
                 const end = new Date(start.getTime() + minutesToAdd * 60000);
-                return {
-                    ...args,
-                    endTime: formatTime(end)
-                };
+                finalEndTime = formatTime(end);
             }
         }
     }
 
-    if (!endTime) {
+    // Ensure endTime is formatted as HH:MM if it was provided directly
+    if (endTime && !finalEndTime) {
+        const parsedEnd = parseTime(endTime);
+        if (parsedEnd) {
+            finalEndTime = formatTime(parsedEnd);
+        }
+    }
+
+    if (!finalEndTime) {
         throw new Error("endTime is required (or provide duration)");
     }
 
-    return args;
+    return {
+        ...args,
+        startTime: normalizedStartTime,
+        endTime: finalEndTime
+    };
 }
 
 // --------------------
