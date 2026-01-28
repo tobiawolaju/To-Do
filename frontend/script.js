@@ -278,6 +278,8 @@ function editActivity(activity) {
 
 async function updateActivity(activityId, data) {
     if (!currentUser) return;
+    const saveBtn = document.getElementById('save-edit');
+
     try {
         const response = await fetch("https://to-do-iun8.onrender.com/api/activities/update", {
             method: "POST",
@@ -290,12 +292,23 @@ async function updateActivity(activityId, data) {
             })
         });
 
-        if (!response.ok) throw new Error("Failed to update activity");
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || "Failed to update activity");
+        }
 
+        // Success - close the panel (Firebase listener will update the UI)
         closeDetails();
+
     } catch (error) {
         console.error("Error updating activity:", error);
-        alert("Failed to update activity.");
+        alert("Failed to update activity: " + error.message);
+
+        // Reset button state on error
+        if (saveBtn) {
+            saveBtn.textContent = 'Save Changes';
+            saveBtn.disabled = false;
+        }
     }
 }
 
