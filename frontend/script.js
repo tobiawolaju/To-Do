@@ -116,6 +116,36 @@ function loadUserSchedule(uid) {
     });
 }
 
+function renderAttendeesHtml(attendees) {
+    if (!attendees || attendees.length === 0) return '';
+
+    const attendeesHtml = attendees.map(name => `<span class="attendee-chip">${name}</span>`).join('');
+    return `
+        <div class="detail-item">
+            <h3>Attendees</h3>
+            <div class="attendees-list">
+                ${attendeesHtml}
+            </div>
+        </div>
+    `;
+}
+
+function renderTagsHtml(tags) {
+    const tagsList = tags || [];
+    const tagsHtml = tagsList.length > 0
+        ? tagsList.map(tag => `<span class="tag-chip">${tag}</span>`).join('')
+        : '<span class="no-tags">No tags</span>';
+
+    return `
+        <div class="detail-item">
+            <h3>Tags</h3>
+            <div class="tags-list">
+                ${tagsHtml}
+            </div>
+        </div>
+    `;
+}
+
 function renderDetails(activity) {
     const panel = document.getElementById('details-panel');
     const overlay = document.getElementById('details-overlay');
@@ -156,21 +186,9 @@ function renderDetails(activity) {
                     </div>
                 </div>
                 
-                ${activity.attendees && activity.attendees.length > 0 ? `
-                <div class="detail-item">
-                    <h3>Attendees</h3>
-                    <div class="attendees-list">
-                        ${activity.attendees.map(name => `<span class="attendee-chip">${name}</span>`).join('')}
-                    </div>
-                </div>
-                ` : ''}
+                ${renderAttendeesHtml(activity.attendees)}
 
-<div class="detail-item">
-    <h3>Tags</h3>
-    <div class="tags-list">
-        ${(activity.tags || []).map(tag => `<span class="tag-chip">${tag}</span>`).join('') || '<span class="no-tags">No tags</span>'}
-    </div>
-</div>
+                ${renderTagsHtml(activity.tags)}
             </div>
 
     <div class="detail-actions">
