@@ -46,15 +46,13 @@ function initAuth() {
     const signOutBtn = document.getElementById('signout-btn');
     const userProfile = document.getElementById('user-profile');
     const userPhoto = document.getElementById('user-photo');
+    const landingPage = document.getElementById('landing-page');
+    const appContainer = document.querySelector('.app-container');
+    const landingSignInBtn = document.getElementById('landing-signin-btn');
+    const heroSignInBtn = document.getElementById('hero-signin-btn');
 
-    userProfile.addEventListener('click', (e) => {
-        // Only redirect if they didn't click the signout button
-        if (!e.target.closest('#signout-btn')) {
-            window.location.href = 'dashboard.html';
-        }
-    });
-
-    signInBtn.addEventListener('click', () => {
+    // Sign in function
+    const handleSignIn = () => {
         auth.signInWithPopup(provider).then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
             const credential = result.credential;
@@ -66,7 +64,19 @@ function initAuth() {
             console.error("Sign in error:", error);
             alert("Sign in failed: " + error.message);
         });
+    };
+
+    userProfile.addEventListener('click', (e) => {
+        // Only redirect if they didn't click the signout button
+        if (!e.target.closest('#signout-btn')) {
+            window.location.href = 'dashboard.html';
+        }
     });
+
+    // Add event listeners for all sign-in buttons
+    signInBtn.addEventListener('click', handleSignIn);
+    landingSignInBtn.addEventListener('click', handleSignIn);
+    heroSignInBtn.addEventListener('click', handleSignIn);
 
     signOutBtn.addEventListener('click', () => {
         auth.signOut().then(() => {
@@ -78,6 +88,10 @@ function initAuth() {
     auth.onAuthStateChanged((user) => {
         currentUser = user;
         if (user) {
+            // User is signed in - show app, hide landing page
+            landingPage.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+
             // UI Updates
             signInBtn.classList.add('hidden');
             userProfile.classList.remove('hidden');
@@ -86,6 +100,10 @@ function initAuth() {
             // Load Data
             loadUserSchedule(user.uid);
         } else {
+            // User is signed out - show landing page, hide app
+            landingPage.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+
             // UI Updates
             signInBtn.classList.remove('hidden');
             userProfile.classList.add('hidden');
