@@ -176,7 +176,7 @@ export default function Timeline({ activities, onSelectActivity }) {
     }
 
     return (
-        <div className="timeline-container" ref={containerRef}>
+        <div className="timeline-container" ref={containerRef} onClick={() => onSelectActivity(null)}>
             <TimeRuler zoom={zoom} />
             <div className="tracks-container" style={{ height: `calc(${trackCount} * var(--grid-track-total))` }}>
                 <TimeIndicator zoom={zoom} />

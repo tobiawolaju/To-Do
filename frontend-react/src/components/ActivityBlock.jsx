@@ -34,7 +34,10 @@ export default function ActivityBlock({ activity, onClick }) {
     }
 
     return (
-        <div className="activity-block" style={style} onClick={onClick}>
+        <div className="activity-block" style={style} onClick={(e) => {
+            e.stopPropagation();
+            onClick();
+        }}>
             <div className="activity-title">{activity.title}</div>
             <div className="activity-time">{activity.startTime} - {activity.endTime}</div>
         </div>
