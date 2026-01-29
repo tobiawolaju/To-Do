@@ -730,16 +730,26 @@ header h1 {
 @media (min-width: 1024px) {
   .main-content {
     display: grid;
+    grid-template-columns: 1fr;
+    transition: grid-template-columns 0.4s var(--ease-standard);
+  }
+
+  .main-content.has-selection {
     grid-template-columns: 1fr 400px;
   }
 
   .details-panel {
+    display: none;
     position: relative;
     transform: none !important;
     height: 100%;
     padding-top: 40px;
     box-shadow: none;
-    box-shadow: -1px 0 0 var(--border-subtle);
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .main-content.has-selection .details-panel {
+    display: block;
   }
 
   .details-panel-overlay {
@@ -747,6 +757,10 @@ header h1 {
   }
 
   .chat-input-container {
+    left: 50%;
+  }
+
+  .main-content.has-selection .chat-input-container {
     left: calc(50% - 200px);
   }
 

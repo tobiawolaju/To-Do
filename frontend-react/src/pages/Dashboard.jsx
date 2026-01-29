@@ -81,7 +81,7 @@ export default function Dashboard({ user, onLogout, accessToken, onNavigateToPro
     return (
         <div className="app-container">
             <Header user={user} onLogout={onLogout} onProfileClick={onNavigateToProfile} />
-            <main className="main-content">
+            <main className={`main-content ${selectedActivity ? 'has-selection' : ''}`}>
                 <Timeline
                     activities={activities}
                     onSelectActivity={setSelectedActivity}
