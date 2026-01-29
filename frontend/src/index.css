@@ -203,10 +203,11 @@ header h1 {
 /* Timeline Components */
 .timeline-container {
   flex: 1;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
   background: var(--bg-main);
-  overscroll-behavior-y: hidden;
+  overscroll-behavior: none;
 }
 
 .timeline-container::-webkit-scrollbar {
@@ -244,9 +245,10 @@ header h1 {
 }
 
 .tracks-container {
-  padding: 24px 0;
+  padding: 0;
   position: relative;
-  min-height: 100%;
+  height: calc(100% - 48px);
+  /* Account for time-ruler height */
   /* Grid-like background for a technical look */
   background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
