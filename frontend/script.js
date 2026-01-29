@@ -162,6 +162,22 @@ function renderTagsHtml(tags) {
     `;
 }
 
+function renderDaysHtml(days) {
+    const daysList = days || [];
+    const daysHtml = daysList.length > 0
+        ? daysList.map(day => `<span class="tag-chip">${day}</span>`).join('')
+        : '<span class="no-tags">Every day</span>';
+
+    return `
+        <div class="detail-item">
+            <h3>Active Days</h3>
+            <div class="tags-list">
+                ${daysHtml}
+            </div>
+        </div>
+    `;
+}
+
 function renderDetails(activity) {
     const panel = document.getElementById('details-panel');
     const overlay = document.getElementById('details-overlay');
@@ -205,13 +221,15 @@ function renderDetails(activity) {
                 ${renderAttendeesHtml(activity.attendees)}
 
                 ${renderTagsHtml(activity.tags)}
+
+                ${renderDaysHtml(activity.days)}
             </div>
 
     <div class="detail-actions">
         <button class="action-button primary" id="edit-btn">Edit</button>
         <button class="action-button secondary" id="delete-btn">Delete</button>
     </div>
-        </div>
+        </div >
     `;
 
     // Button Listeners
@@ -234,7 +252,7 @@ function renderDetails(activity) {
 function editActivity(activity) {
     const panel = document.getElementById('details-panel');
     panel.innerHTML = `
-    <div class="edit-container">
+    < div class="edit-container" >
             <h3>Edit Activity</h3>
             <div class="form-group">
                 <label>Title</label>
@@ -259,6 +277,10 @@ function editActivity(activity) {
                 <input type="text" id="edit-tags" value="${(activity.tags || []).join(', ')}">
             </div>
             <div class="form-group">
+                <label>Days (comma separated, e.g., Monday, Tuesday)</label>
+                <input type="text" id="edit-days" value="${(activity.days || []).join(', ')}">
+            </div>
+            <div class="form-group">
                 <label>Description</label>
                 <textarea id="edit-description">${activity.description || ''}</textarea>
             </div>
@@ -266,7 +288,7 @@ function editActivity(activity) {
                 <button class="action-button primary" id="save-edit">Save Changes</button>
                 <button class="action-button secondary" id="cancel-edit">Cancel</button>
             </div>
-        </div>
+        </div >
     `;
 
     document.getElementById('cancel-edit').addEventListener('click', () => {
@@ -285,6 +307,7 @@ function editActivity(activity) {
             location: document.getElementById('edit-location').value,
             description: document.getElementById('edit-description').value,
             tags: document.getElementById('edit-tags').value.split(',').map(t => t.trim()).filter(t => t),
+            days: document.getElementById('edit-days').value.split(',').map(t => t.trim()).filter(t => t),
             status: activity.status || 'Scheduled'
         };
 
@@ -592,8 +615,15 @@ function renderTimeRuler() {
 function layoutAndRenderActivities(activities) {
     if (!activities) return;
 
+    // Filter by current day of the week
+    const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    const filteredActivities = activities.filter(activity => {
+        if (!activity.days || activity.days.length === 0) return true; // Show if no days specified
+        return activity.days.includes(currentDay);
+    });
+
     // 1. Sort by start time
-    const sorted = [...activities].sort((a, b) => parseTime(a.startTime) - parseTime(b.startTime));
+    const sorted = [...filteredActivities].sort((a, b) => parseTime(a.startTime) - parseTime(b.startTime));
 
     // 2. Assign tracks
     const tracks = [];
@@ -626,13 +656,13 @@ function layoutAndRenderActivities(activities) {
     const trackHeight = 80; // Match CSS
     const trackGap = 16;  // Match CSS
 
-    container.style.height = `${tracks.length * (trackHeight + trackGap)}px`;
+    container.style.height = `${tracks.length * (trackHeight + trackGap)} px`;
 
     sorted.forEach(activity => {
         const el = document.createElement('div');
         el.className = 'activity-block';
         el.innerHTML = `
-    <div class="activity-title">${activity.title}</div>
+    < div class="activity-title" > ${activity.title}</div >
         <div class="activity-time">${activity.startTime} - ${activity.endTime}</div>
 `;
 
@@ -641,13 +671,13 @@ function layoutAndRenderActivities(activities) {
         const duration = end - start;
 
         // Use CSS variables for time-based positioning
-        el.style.left = `calc(${start} * var(--pixels-per-minute))`;
-        el.style.width = `calc(${duration} * var(--pixels-per-minute))`;
-        el.style.top = `${activity.trackIndex * (80 + 16)}px`; // 80 is trackHeight, 16 is trackGap
+        el.style.left = `calc(${start} * var(--pixels - per - minute))`;
+        el.style.width = `calc(${duration} * var(--pixels - per - minute))`;
+        el.style.top = `${activity.trackIndex * (80 + 16)} px`; // 80 is trackHeight, 16 is trackGap
 
         let bgColor = activity.color || '#5865F2';
         el.style.backgroundColor = hexToRgba(bgColor, 0.15);
-        el.style.borderLeft = `4px solid ${bgColor}`;
+        el.style.borderLeft = `4px solid ${bgColor} `;
         el.style.color = 'var(--text-primary)';
 
 
@@ -679,7 +709,7 @@ function setupCurrentTimeIndicator() {
     function update() {
         const now = new Date();
         const minutes = now.getHours() * 60 + now.getMinutes();
-        indicator.style.left = `calc(${minutes} * var(--pixels-per-minute))`;
+        indicator.style.left = `calc(${minutes} * var(--pixels - per - minute))`;
         requestAnimationFrame(update);
     }
     update();

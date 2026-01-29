@@ -53,6 +53,7 @@ const tools = {
             location: location || "",
             attendees: attendees || [],
             tags: tags || [],
+            days: days || [new Date().toLocaleDateString('en-US', { weekday: 'long' })],
             status: "Pending",
             color: "#" + Math.floor(Math.random() * 16777215).toString(16) // Random Hex Color
         };

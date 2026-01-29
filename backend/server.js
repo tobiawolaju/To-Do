@@ -55,7 +55,8 @@ function normalizeAliases(args) {
         location: args.location,
         id: args.id,
         query: args.query,
-        tags: args.tags
+        tags: args.tags,
+        days: args.days || args.recurrence || args.on
     };
 }
 
@@ -165,6 +166,7 @@ Mapping rules:
 - "time", "at", "starts" → startTime
 - "for X minutes/hours" → duration
 - "with tags X, Y" or "tagged as X" → tags (array of strings)
+- "on Mondays", "every Tuesday", "weekdays", "daily" → days (array of strings, e.g., ["Monday", "Tuesday"])
 
 MULTIPLE TASKS:
 If the user wants to add multiple activities (e.g., "Swim at 10pm AND Read at 8am"),
