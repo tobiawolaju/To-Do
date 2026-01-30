@@ -140,7 +140,14 @@ export default function DetailsSheet({ activity, isOpen, onClose, onSave, onDele
     };
 
     const renderDays = (days) => {
-        if (!days || days.length === 0) return null;
+        if (!days || days.length === 0) {
+            return (
+                <div className="detail-section">
+                    <h3>Schedule</h3>
+                    <div className="detail-value" style={{ color: 'var(--text-muted)' }}>Does not repeat</div>
+                </div>
+            );
+        }
 
         const order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         const sortedDays = [...days].sort((a, b) => order.indexOf(a) - order.indexOf(b));
@@ -210,16 +217,7 @@ export default function DetailsSheet({ activity, isOpen, onClose, onSave, onDele
                         </div>
                     </div>
 
-                    <div style={{ marginBottom: '24px' }}>
-                        <div className="detail-label">Repeats</div>
-                        <div className="detail-value">
-                            {activity.days && activity.days.length > 0 ? (
-                                activity.days.join(', ')
-                            ) : (
-                                'Does not repeat'
-                            )}
-                        </div>
-                    </div>
+                    {renderDays(activity.days)}
                 </div>
 
                 <div className="detail-actions" style={{ marginTop: 'auto', paddingTop: '32px' }}>

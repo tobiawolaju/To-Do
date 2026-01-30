@@ -20,9 +20,9 @@ function getRRULE(days) {
     const byDay = days.map(d => dayMap[d]).filter(d => d).join(',');
     if (!byDay) return null;
 
-    // If all 7 days are selected, FREQ=DAILY is cleaner, otherwise WEEKLY with specific days
-    const freq = days.length === 7 ? "DAILY" : "WEEKLY";
-    const rrule = `RRULE:FREQ=${freq}${freq === "WEEKLY" ? `;BYDAY=${byDay}` : ""}`;
+    // Using WEEKLY with INTERVAL=1 ensures it shows up as "Custom" / "Weekly" in Calendar UI
+    // even if it's every day, which helps users identify it as a repeating series.
+    const rrule = `RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=${byDay}`;
     return [rrule];
 }
 
