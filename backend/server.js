@@ -166,7 +166,7 @@ Mapping rules:
 - "time", "at", "starts" → startTime
 - "for X minutes/hours" → duration
 - "with tags X, Y" or "tagged as X" → tags (array of strings)
-- "on Mondays", "every Tuesday", "weekdays", "daily" → days (array of strings, e.g., ["Monday", "Tuesday"])
+- "on Mondays", "every Tuesday", "weekdays", "daily" → days (array of strings, e.g., ["Monday", "Tuesday"])// if user says to tommrow, gigure out the right day if it is monday -sunday and use that, dont use users adjective of day
 
 MULTIPLE TASKS:
 If the user wants to add multiple activities (e.g., "Swim at 10pm AND Read at 8am"),
