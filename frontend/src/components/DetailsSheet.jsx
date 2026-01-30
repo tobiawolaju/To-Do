@@ -179,21 +179,21 @@ export default function DetailsSheet({ activity, isOpen, onClose, onSave, onDele
                     <h2>{activity.title}</h2>
                     <div style={{ fontSize: '18px', fontWeight: 500, color: statusColor, display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span>{activity.status || 'Pending'}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.4)' }}>—</span>
-                        <span style={{ color: '#fff' }}>{activity.startTime} — {activity.endTime}</span>
+                        <span style={{ color: 'var(--text-muted)' }}>—</span>
+                        <span style={{ color: 'var(--text-primary)' }}>{activity.startTime} — {activity.endTime}</span>
                     </div>
                 </div>
 
                 <div className="detail-content">
                     {activity.description && (
-                        <div style={{ marginBottom: '32px', fontSize: '16px', lineHeight: '1.6', color: '#ddd' }}>
+                        <div style={{ marginBottom: '32px', fontSize: '16px', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
                             {activity.description}
                         </div>
                     )}
 
                     <div style={{ marginBottom: '24px' }}>
                         <div className="detail-label">Location</div>
-                        <div className="detail-value">{activity.location || 'Remote / Not specified'}</div>
+                        <div className="detail-value" style={{ color: 'var(--text-primary)' }}>{activity.location || 'Remote / Not specified'}</div>
                     </div>
 
                     <div style={{ marginBottom: '24px' }}>
@@ -204,7 +204,7 @@ export default function DetailsSheet({ activity, isOpen, onClose, onSave, onDele
                                     <span key={tag} className="tag-chip">{tag}</span>
                                 ))
                             ) : (
-                                <span style={{ color: 'rgba(255,255,255,0.3)' }}>No tags</span>
+                                <span style={{ color: 'var(--text-muted)' }}>No tags</span>
                             )}
                         </div>
                     </div>
@@ -245,7 +245,7 @@ export default function DetailsSheet({ activity, isOpen, onClose, onSave, onDele
         <div className="detail-container edit-container">
             <header className="detail-header">
                 <h2>Edit Activity</h2>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>Modify the details below</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Modify the details below</p>
             </header>
 
             <div className="form-content">

@@ -8,7 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* ===== COLOR SYSTEM: WEB3 NEON ===== */
+  /* ===== COLOR SYSTEM: WEB3 (Default Dark) ===== */
   --bg-void: #030304;
   /* Pitch black/deep space */
   --bg-surface: #0a0a0c;
@@ -16,22 +16,25 @@
   --bg-elevated: #121216;
   /* Hover/Active states */
   --bg-glass: rgba(10, 10, 12, 0.7);
-  /* Glass backdrop */
+  --bg-panel: #1e0b36;
+  /* Deep Purple Panel */
+  --bg-block: rgba(20, 20, 30, 0.6);
+  /* Activity Block */
 
-  /* Borders - Thin, subtle, glass-like */
+  /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-visible: rgba(255, 255, 255, 0.15);
   --border-glow: rgba(255, 255, 255, 0.3);
 
-  /* Text - High Contrast White */
+  /* Text */
   --text-primary: #ffffff;
   --text-secondary: #a0a0b0;
   --text-muted: #606070;
   --text-ghost: #404050;
 
-  /* Accents - Neon Cyberpunk */
+  /* Accents */
   --accent-primary: #7000ff;
-  /* Electric Purple (Solana-ish) */
+  /* Electric Purple */
   --accent-secondary: #00f0ff;
   /* Cyber Cyan */
   --accent-tertiary: #ff0055;
@@ -40,30 +43,26 @@
   --accent-glow: rgba(112, 0, 255, 0.4);
   --accent-text: #b080ff;
 
-  /* Status Colors - Neon */
+  /* Status */
   --status-success: #00ff9d;
-  /* Matrix Green */
   --status-warning: #ffb700;
   --status-error: #ff3333;
   --status-info: #00f0ff;
 
-  /* ===== TYPOGRAPHY ===== */
+  /* Typography */
   --font-display: 'Space Grotesk', sans-serif;
-  /* The Web3 font */
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* ===== METRICS & SPACING (Un-cramped) ===== */
+  /* Metrics */
   --header-height: 70px;
   --track-height: 80px;
-  /* Taller tracks for comfort */
   --track-gap: 12px;
   --grid-track-total: calc(var(--track-height) + var(--track-gap));
 
-  /* Zoom Variables - Critical */
+  /* Zoom */
   --zoom-level: 1;
   --base-hour-width: 240px;
-  /* Wider defaults */
   --hour-width: calc(var(--base-hour-width) * var(--zoom-level));
   --pixels-per-minute: calc(var(--hour-width) / 60);
 
@@ -72,10 +71,39 @@
   --radius-l: 24px;
   --radius-pill: 9999px;
 
-  /* ===== EFFECTS ===== */
+  /* Effects */
   --shadow-glow: 0 0 20px var(--accent-glow);
   --backdrop-blur: blur(16px);
-  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ===== LIGHT MODE (Web3 Light) ===== */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-void: #ffffff;
+    --bg-surface: #f9fafb;
+    --bg-elevated: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.85);
+    --bg-panel: #ffffff;
+    --bg-block: rgba(255, 255, 255, 0.9);
+
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --border-visible: rgba(0, 0, 0, 0.1);
+    --border-glow: rgba(112, 0, 255, 0.2);
+
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+    --text-ghost: #e5e7eb;
+
+    /* Accents - Keep distinct but legible */
+    --accent-primary: #7000ff;
+    --accent-secondary: #00b4d8;
+    /* Darker Cyan for contrast */
+    --accent-glow: rgba(112, 0, 255, 0.15);
+    --accent-text: #6000e0;
+
+    --status-warning: #d97706;
+  }
 }
 
 /* ============================================
@@ -274,7 +302,7 @@ header {
 .activity-block {
   position: absolute;
   height: var(--track-height);
-  background: rgba(20, 20, 30, 0.6);
+  background: var(--bg-block);
   border: 1px solid var(--border-visible);
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   /* Top highlight */
@@ -367,7 +395,8 @@ header {
   left: 50%;
   transform: translateX(-50%);
   width: min(700px, 92%);
-  background: rgba(10, 10, 15, 0.6);
+  background: var(--bg-glass);
+  /* Use variable for light/dark switching */
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border-glow);
   border-radius: var(--radius-pill);
@@ -430,7 +459,7 @@ header {
    ============================================ */
 .details-panel {
   position: fixed;
-  background: #1e0b36;
+  background: var(--bg-panel);
   /* Solid Deep Purple (slightly lighter than void) */
   border-left: 1px solid var(--accent-primary);
   z-index: 500;

@@ -31,11 +31,11 @@ function BlockClock() {
         <div className="live-clock fade-in-up" style={{
             animationDelay: '0.4s',
             fontFamily: "'JetBrains Mono', monospace",
-            background: 'rgba(0,0,0,0.5)',
+            background: 'var(--bg-glass)',
             border: '1px solid var(--accent-primary)',
             padding: '12px 24px',
             borderRadius: '8px',
-            color: '#fff',
+            color: 'var(--text-primary)',
             textShadow: '0 0 10px var(--accent-primary)',
             marginTop: '40px',
             display: 'flex',
