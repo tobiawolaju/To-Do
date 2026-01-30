@@ -45,8 +45,8 @@
 }
 
 .action-btn {
-    background: var(--accent-primary);
-    color: #fff;
+    background: #fff;
+    color: #000;
     border-radius: 0px !important;
     height: 44px;
     width: 44px;
@@ -60,5 +60,6 @@
 }
 
 .action-btn:hover {
-    background: var(--accent-secondary);
+    background: #e4e4e7;
+    color: #000;
 }
