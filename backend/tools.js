@@ -21,7 +21,6 @@ function getRRULE(days) {
     };
 
     const byDay = normalizedDays.map(d => dayMap[d]).filter(d => d).join(',');
-
     console.log("Sync Trace: Days in:", JSON.stringify(days), "BYDAY:", byDay);
 
     if (!byDay) return null;
@@ -130,7 +129,7 @@ const tools = {
                     event.recurrence = recurrence;
                 }
 
-                console.log("Sync Trace: Sending to Google:", JSON.stringify(event, null, 2));
+                console.log("Sync Trace: Sending to Google (Insert):", JSON.stringify(event, null, 2));
 
                 const res = await calendar.events.insert({
                     calendarId: 'primary',
@@ -142,7 +141,7 @@ const tools = {
                 console.log(`Sync Trace: Success! Event ID: ${res.data.id}`);
 
             } catch (err) {
-                console.error("Sync Trace: FAIL:", err.message);
+                console.error("Sync Trace: FAIL (Insert):", err.message);
                 calendarSync = { success: false, error: err.message };
             }
         }
@@ -181,33 +180,48 @@ const tools = {
 
         let calendarSync = { success: true };
 
-        if (accessToken && originalActivity.googleEventId) {
+        if (accessToken) {
             try {
                 const calendar = getCalendarClient(accessToken);
-                const eventPatch = {};
-                if (updates.title) eventPatch.summary = updates.title;
-                if (updates.description) eventPatch.description = updates.description;
-                if (updates.location) eventPatch.location = updates.location;
-                if (updates.startTime) eventPatch.start = {
-                    dateTime: convertToISO(updatedActivity.startTime, timeZone),
-                    timeZone: timeZone || 'UTC'
-                };
-                if (updates.endTime) eventPatch.end = {
-                    dateTime: convertToISO(updatedActivity.endTime, timeZone),
-                    timeZone: timeZone || 'UTC'
-                };
-                if (updates.days) {
-                    eventPatch.recurrence = getRRULE(updatedActivity.days);
-                }
 
-                await calendar.events.patch({
-                    calendarId: 'primary',
-                    eventId: originalActivity.googleEventId,
-                    resource: eventPatch,
-                });
-                console.log("Sync Trace: Google Calendar event updated");
+                // Construct the event object for Google
+                const event = {
+                    summary: updatedActivity.title,
+                    location: updatedActivity.location,
+                    description: updatedActivity.description,
+                    start: {
+                        dateTime: convertToISO(updatedActivity.startTime, timeZone),
+                        timeZone: timeZone || 'UTC'
+                    },
+                    end: {
+                        dateTime: convertToISO(updatedActivity.endTime, timeZone),
+                        timeZone: timeZone || 'UTC'
+                    },
+                    recurrence: getRRULE(updatedActivity.days),
+                    attendees: (updatedActivity.attendees || []).map(email => ({ email })),
+                };
+
+                if (originalActivity.googleEventId) {
+                    console.log(`Sync Trace: Sending to Google (Patch): ${originalActivity.googleEventId}`);
+                    await calendar.events.patch({
+                        calendarId: 'primary',
+                        eventId: originalActivity.googleEventId,
+                        resource: event,
+                    });
+                    console.log("Sync Trace: Google Calendar event updated.");
+                } else {
+                    // Recovery mode: Create the event if it's missing from Google
+                    console.log("Sync Trace: Scaling recovery mode (Insert missing event).");
+                    const res = await calendar.events.insert({
+                        calendarId: 'primary',
+                        resource: event,
+                    });
+                    updatedActivity.googleEventId = res.data.id;
+                    updatedActivity.htmlLink = res.data.htmlLink;
+                    console.log(`Sync Trace: Success (Recovery Insert)! Event ID: ${res.data.id}`);
+                }
             } catch (err) {
-                console.error("Sync Trace: Update FAIL:", err.message);
+                console.error("Sync Trace: FAIL (Update):", err.message);
                 calendarSync = { success: false, error: err.message };
             }
         }
@@ -240,13 +254,14 @@ const tools = {
         if (accessToken && activityToDelete.googleEventId) {
             try {
                 const calendar = getCalendarClient(accessToken);
+                console.log(`Sync Trace: Sending to Google (Delete): ${activityToDelete.googleEventId}`);
                 await calendar.events.delete({
                     calendarId: 'primary',
                     eventId: activityToDelete.googleEventId,
                 });
-                console.log("Sync Trace: Google Calendar event deleted");
+                console.log("Sync Trace: Google Calendar event deleted.");
             } catch (err) {
-                console.error("Sync Trace: Delete FAIL:", err.message);
+                console.error("Sync Trace: FAIL (Delete):", err.message);
                 calendarSync = { success: false, error: err.message };
             }
         }
