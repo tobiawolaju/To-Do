@@ -70,7 +70,7 @@ export default function LandingPage({ onLogin }) {
 
     return (
         <div className="landing-page">
-            <NeonOrbs />
+            {/* Removed NeonOrbs for cleaner grid look */}
 
             <div className="landing-scroll-container">
                 <section className="landing-section" ref={heroRef}>
@@ -81,7 +81,7 @@ export default function LandingPage({ onLogin }) {
                         }}
                     >
                         <div className="hero-badge fade-in-up" style={{ borderRadius: '0px' }}>
-                            <span className="badge-dot" style={{ background: '#fff', boxShadow: 'none', borderRadius: '0px' }}></span>
+                            <span className="badge-dot" style={{ background: 'var(--text-primary)', boxShadow: 'none', borderRadius: '0px' }}></span>
                             <span>TIME EDITOR v1.0</span>
                         </div>
 
@@ -94,7 +94,8 @@ export default function LandingPage({ onLogin }) {
                             fontFamily: "'Space Grotesk', sans-serif",
                             fontSize: '18px',
                             color: 'var(--text-secondary)',
-                            letterSpacing: '0.05em'
+                            letterSpacing: '0.05em',
+                            textTransform: 'uppercase'
                         }}>
                             STOP DELAYING. START LIVING.
                         </p>
@@ -108,8 +109,8 @@ export default function LandingPage({ onLogin }) {
                             className="hero-cta"
                             onClick={onLogin}
                             style={{
-                                background: '#fff',
-                                color: '#000',
+                                background: 'var(--text-primary)',
+                                color: 'var(--bg-void)',
                                 padding: '16px 48px',
                                 borderRadius: '0px',
                                 fontWeight: 700,
@@ -121,12 +122,12 @@ export default function LandingPage({ onLogin }) {
                                 textTransform: 'uppercase'
                             }}
                         >
-                            Start Editing Time
+                            LOGIN
                         </button>
 
                         <div className="trust-badges" style={{ marginTop: '32px', opacity: 0.7 }}>
                             <span style={{ color: 'var(--text-secondary)' }}>Focus First</span>
-                            <span style={{ margin: '0 12px', color: '#555' }}>//</span>
+                            <span style={{ margin: '0 12px', color: 'var(--text-muted)' }}>//</span>
                             <span style={{ color: 'var(--text-secondary)' }}>Real Intent</span>
                         </div>
                     </div>
