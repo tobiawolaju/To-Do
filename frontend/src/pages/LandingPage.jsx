@@ -53,7 +53,7 @@ export default function LandingPage({ onLogin }) {
 
 
                         <h1 className="brand-title fade-in-up" style={{ animationDelay: '0.1s' }}>
-                            CRASTINAT
+                            IF·THEN
                         </h1>
 
 

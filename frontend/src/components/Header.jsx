@@ -11,7 +11,7 @@ export default function Header({ user, onLogout, onProfileClick }) {
     return (
         <header>
             <div className="header-main">
-                <h1>Crastinat</h1>
+                <h1>IF·THEN</h1>
                 <span id="current-date" className="hidden-mobile">
                     {currentDate}
                 </span>
