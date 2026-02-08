@@ -17,37 +17,7 @@ function NeonOrbs() {
     );
 }
 
-// Block Timestamp
-function BlockClock() {
-    const [time, setTime] = useState(new Date());
 
-    useEffect(() => {
-        const interval = setInterval(() => setTime(new Date()), 1000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const format = (n) => n.toString().padStart(2, '0');
-
-    return (
-        <div className="live-clock fade-in-up" style={{
-            animationDelay: '0.4s',
-            fontFamily: "'JetBrains Mono', monospace",
-            background: 'var(--bg-glass)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            padding: '12px 24px',
-            borderRadius: '8px',
-            color: 'var(--text-primary)',
-            textShadow: '0 0 10px rgba(255,255,255,0.2)',
-            marginTop: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px'
-        }}>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.8em' }}>CURRENT TIME:</span>
-            <span>{format(time.getHours())}:{format(time.getMinutes())}:{format(time.getSeconds())}</span>
-        </div>
-    );
-}
 
 export default function LandingPage({ onLogin }) {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -80,27 +50,13 @@ export default function LandingPage({ onLogin }) {
                             transform: `translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)`
                         }}
                     >
-                        <div className="hero-badge fade-in-up" style={{ borderRadius: '0px' }}>
-                            <span className="badge-dot" style={{ background: 'var(--text-primary)', boxShadow: 'none', borderRadius: '0px' }}></span>
-                            <span>TIME EDITOR v1.0</span>
-                        </div>
+
 
                         <h1 className="brand-title fade-in-up" style={{ animationDelay: '0.1s' }}>
                             CRASTINAT
                         </h1>
 
-                        <p className="brand-tagline fade-in-up" style={{
-                            animationDelay: '0.2s',
-                            fontFamily: "'Space Grotesk', sans-serif",
-                            fontSize: '18px',
-                            color: 'var(--text-secondary)',
-                            letterSpacing: '0.05em',
-                            textTransform: 'uppercase'
-                        }}>
-                            STOP DELAYING. START LIVING.
-                        </p>
 
-                        <BlockClock />
                     </div>
 
                     {/* CTA Section */}
@@ -125,11 +81,7 @@ export default function LandingPage({ onLogin }) {
                             LOGIN
                         </button>
 
-                        <div className="trust-badges" style={{ marginTop: '32px', opacity: 0.7 }}>
-                            <span style={{ color: 'var(--text-secondary)' }}>Focus First</span>
-                            <span style={{ margin: '0 12px', color: 'var(--text-muted)' }}>//</span>
-                            <span style={{ color: 'var(--text-secondary)' }}>Real Intent</span>
-                        </div>
+
                     </div>
                 </section>
             </div>
