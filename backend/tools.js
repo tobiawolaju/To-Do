@@ -65,6 +65,16 @@ function convertToISO(timeStr, timeZone = 'UTC') {
     return isoStr;
 }
 
+// Helper: Update user's last activity timestamp for schedule changes
+async function updateLastActivity(uid) {
+    if (!uid) return;
+    try {
+        await db.ref(`users/${uid}/metadata/lastScheduleUpdate`).set(Date.now());
+    } catch (err) {
+        console.error("Error updating last activity:", err);
+    }
+}
+
 const tools = {
     getSchedule: async (args, context) => {
         const { uid } = context;
@@ -148,6 +158,7 @@ const tools = {
 
         activitiesArray.push(newActivity);
         await ref.set(activitiesArray);
+        await updateLastActivity(uid); // Track activity
 
         return {
             success: true,
@@ -227,6 +238,7 @@ const tools = {
         }
 
         await ref.set(activities);
+        await updateLastActivity(uid); // Track activity
         return {
             success: true,
             message: calendarSync.success ? "Activity updated." : "Updated in DB, but Calendar update failed.",
@@ -279,6 +291,7 @@ const tools = {
         }
 
         await ref.set(newActivities);
+        await updateLastActivity(uid); // Track activity for futures invalidation
         return {
             success: true,
             message: calendarSync.success ? "Activity deleted." : "Deleted from DB, but Calendar deletion failed.",
@@ -313,13 +326,20 @@ const tools = {
             const scheduleVal = scheduleSnapshot.val();
             const schedule = scheduleVal ? (Array.isArray(scheduleVal) ? scheduleVal : Object.values(scheduleVal)) : [];
 
+            // Also get metadata for last activity timestamp
+            const metaRef = db.ref(`users/${uid}/metadata`);
+            const metaSnapshot = await metaRef.once('value');
+            const meta = metaSnapshot.val() || {};
+
             return {
                 messages: chatData.messages || [],
-                schedule
+                lastChatUpdate: chatData.lastUpdated || 0,
+                schedule,
+                lastScheduleUpdate: meta.lastScheduleUpdate || 0
             };
         } catch (err) {
             console.error("Error fetching conversation history:", err);
-            return { messages: [], schedule: [] };
+            return { messages: [], schedule: [], lastChatUpdate: 0, lastScheduleUpdate: 0 };
         }
     },
 

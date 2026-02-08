@@ -306,12 +306,10 @@ app.post("/api/predict-future", async (req, res) => {
             return res.status(400).json({ error: "userId required" });
         }
 
-        // 1. Check for existing futures
+
+
+        // 1. Check for existing futures (will verify staleness later)
         const existingFutures = await tools.getUserFutures(userId);
-        if (existingFutures && existingFutures.data) {
-            console.log(`Returning existing futures for ${userId}`);
-            return res.json({ futures: existingFutures.data });
-        }
 
         // 2. Gather context (Schedule + Chat History)
         const context = { uid: userId, accessToken, timeZone };
