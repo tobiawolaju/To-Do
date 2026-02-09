@@ -57,7 +57,7 @@ export default function ChatInput({ onSendMessage, isProcessing, onOpenFutures }
                 ) : message.trim() ? (
                     <Send size={18} />
                 ) : (
-                    <Sparkles size={18} style={{ color: 'var(--accent-primary)' }} />
+                    <Sparkles size={18} />
                 )}
             </button>
         </div>

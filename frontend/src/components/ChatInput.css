@@ -45,8 +45,9 @@
 }
 
 .action-btn {
-    background: var(--btn-bg);
-    color: var(--btn-text);
+    background: #3b82f6;
+    /* Vibrant Blue */
+    color: white;
     border-radius: 0px !important;
     height: 44px;
     width: 44px;
@@ -60,6 +61,7 @@
 }
 
 .action-btn:hover {
-    background: var(--btn-hover);
-    color: var(--btn-text);
+    background: #2563eb;
+    /* Darker Blue */
+    color: white;
 }
