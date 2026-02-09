@@ -407,6 +407,50 @@ app.post("/api/predict-future", async (req, res) => {
 });
 
 // --------------------
+// Futures Staleness Check API
+// --------------------
+app.post("/api/check-futures-status", async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) {
+            return res.status(400).json({ error: "userId required" });
+        }
+
+        // Get existing futures
+        const existingFutures = await tools.getUserFutures(userId);
+
+        // Gather context
+        const { messages: chatHistory, schedule } = await tools.getConversationHistory(userId);
+
+        // If no data, not stale (nothing to predict from)
+        if ((!schedule || schedule.length === 0) && chatHistory.length === 0) {
+            return res.json({ isStale: false, hasFutures: false });
+        }
+
+        // Compute current hash
+        const sortedSchedule = [...schedule].sort((a, b) => (a.id || 0) - (b.id || 0));
+        const contentToHash = JSON.stringify({
+            schedule: sortedSchedule.map(a => ({
+                id: a.id, title: a.title, days: a.days, startTime: a.start, endTime: a.end
+            })),
+            chat: chatHistory.map(m => ({ role: m.role, content: m.content }))
+        });
+
+        const currentHash = crypto.createHash('sha256').update(contentToHash).digest('hex');
+        const storedHash = existingFutures?.hash;
+
+        const hasFutures = !!(existingFutures && existingFutures.data);
+        const isStale = hasFutures && storedHash !== currentHash;
+
+        res.json({ isStale, hasFutures, currentHash: currentHash.substring(0, 8), storedHash: storedHash?.substring(0, 8) });
+
+    } catch (err) {
+        console.error("Futures status check error:", err);
+        res.status(500).json({ error: "Failed to check futures status: " + err.message });
+    }
+});
+
+// --------------------
 // Conversational Chat API
 // --------------------
 const LIFE_PLANNER_PROMPT = `You are a life planning assistant for IF·THEN - a personal consequence simulator.

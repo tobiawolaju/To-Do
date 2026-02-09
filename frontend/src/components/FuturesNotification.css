@@ -1,0 +1,101 @@
+.futures-fab {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1a73e8;
+    color: white;
+    padding: 12px 16px 12px 12px;
+    border-radius: 28px;
+    box-shadow:
+        0 4px 12px rgba(26, 115, 232, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fab-slide-up 0.3s ease-out;
+    font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@keyframes fab-slide-up {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.fab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.fab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fab-title {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.fab-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fab-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 16px;
+    transition: background 0.2s;
+}
+
+.fab-action.view {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.fab-action.view:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.fab-action.dismiss {
+    padding: 4px;
+    opacity: 0.8;
+}
+
+.fab-action.dismiss:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Light mode override */
+@media (prefers-color-scheme: light) {
+    .futures-fab {
+        background: #1a73e8;
+        color: white;
+    }
+}
