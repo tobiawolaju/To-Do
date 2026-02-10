@@ -27,7 +27,7 @@ if (fs.existsSync(serviceAccountPath)) {
 const vertexAI = new VertexAI({ project: projectId, location: location });
 
 // Using gemini-1.5-flash model via Vertex AI for better regional support
-const model = 'gemini-1.5-flash-002';
+const model = 'gemini-3-flash-preview';
 
 // Helper function to generate content using Vertex AI
 async function generateContent(prompt) {
