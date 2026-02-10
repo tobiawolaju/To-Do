@@ -21,7 +21,7 @@ export default function Dashboard({ user, onLogout, accessToken, getFreshAccessT
     // Dynamic API URL for local vs production testing
     const API_BASE_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:3000'
-        : 'https://to-do-iun8.onrender.com';
+        : 'https://if-then.onrender.com';
 
     const handleSendMessage = async (message) => {
         // Use the new conversation system

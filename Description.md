@@ -174,7 +174,7 @@ users/
     *   `firebase-service-account.json`: For Backend Admin access.
     *   `RENDER`: Detected to switch credential loading paths.
 *   **Endpoints**:
-    *   Production: `https://to-do-iun8.onrender.com`
+    *   Production: `https://if-then.onrender.com`
     *   Local: `http://localhost:3000`
 *   **Package Dependencies**:
     *   Backend: `@google/generative-ai`, `firebase-admin`, `googleapis`.

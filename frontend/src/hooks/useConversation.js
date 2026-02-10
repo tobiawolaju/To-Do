@@ -8,7 +8,7 @@ export function useConversation(user, getFreshAccessToken) {
 
     const API_BASE_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:3000'
-        : 'https://to-do-iun8.onrender.com';
+        : 'https://if-then.onrender.com';
 
     const sendMessage = useCallback(async (message) => {
         if (!user || !message.trim()) return;
